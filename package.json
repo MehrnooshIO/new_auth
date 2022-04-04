@@ -1,0 +1,25 @@
+{
+  "name": "new_auth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app/app.js",
+    "devStart": "nodemon app/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Golnoosh",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/joi": "^17.2.3",
+    "nodemon": "^2.0.15",
+    "typescript": "^4.6.3"
+  },
+  "dependencies": {
+    "@prisma/client": "^3.11.1",
+    "express": "^4.17.3",
+    "joi": "^17.6.0",
+    "prisma": "^3.11.1"
+  }
+}
