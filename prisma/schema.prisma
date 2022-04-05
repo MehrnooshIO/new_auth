@@ -7,13 +7,15 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://root:PCnwXkbTRhwkg4x9@services.irn1.chabokan.net:56035/ruth"
+  url      = "mysql://root:e0h6lbRIf2lNx1gn@services.irn1.chabokan.net:45546/viola"
 }
 
+
 model User {
-  id Int @id @default(autoincrement())
-  firstName String
-  lastName String
-  email String @unique
-  password String
+  id          Int    @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  email       String  @unique
+  password    String
+
 }

@@ -18,9 +18,14 @@ async function FindUserByEmail(userEmail: string) {
     return result
 }
 
-export const CreateNewUser = async (user: userSignUp) => {  
-    const newUser = await prisma.user.create(
-        {data: user}
-    )
-    return newUser.id 
+export const CreateNewUser = async (user: userSignUp) => {
+    const result = await FindUserByEmail(user.email)
+    if (result) {
+        throw "User already exists"
+    } else {
+        const newUser = await prisma.user.create(
+            {data: user}
+        )
+        return newUser.id 
+    }   
 }

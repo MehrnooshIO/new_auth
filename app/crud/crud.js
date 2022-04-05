@@ -23,8 +23,14 @@ function FindUserByEmail(userEmail) {
     });
 }
 const CreateNewUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
-    const newUser = yield prisma.user.create({ data: user });
-    return newUser.id;
+    const result = yield FindUserByEmail(user.email);
+    if (result) {
+        throw "User already exists";
+    }
+    else {
+        const newUser = yield prisma.user.create({ data: user });
+        return newUser.id;
+    }
 });
 exports.CreateNewUser = CreateNewUser;
 //# sourceMappingURL=crud.js.map

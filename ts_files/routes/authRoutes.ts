@@ -23,7 +23,6 @@ import { UserSignUpValidator } from "../schemas/schemas";
                             res.status(500).json(`Internal Server Error: ${err}`).send()
                         }
                     })
-             
          }
         });
      return router;
