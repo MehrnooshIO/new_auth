@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginRouter = exports.authRouter = void 0;
+exports.authRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const crud_1 = require("../crud/crud");
 const schemas_1 = require("../schemas/schemas");
@@ -29,19 +29,16 @@ const authRouter = () => {
             });
         }
     });
-    return router;
-};
-exports.authRouter = authRouter;
-const loginRouter = () => {
-    const router = express_1.default.Router();
-    router.get("/login", (req, res) => {
-        (0, crud_1.CheckUserPassword)(req.body).then((result) => {
-            res.status(200).send("Correct Credentials");
+    // login route
+    router.post("/login", (req, res) => {
+        (0, crud_1.CheckUserPassword)(req.body).then(result => {
+            res.status(200).json(result).send();
         }).catch(err => {
-            res.status(401).send(err);
+            res.status(400);
+            res.json(err).send();
         });
     });
     return router;
 };
-exports.loginRouter = loginRouter;
+exports.authRouter = authRouter;
 //# sourceMappingURL=authRoutes.js.map

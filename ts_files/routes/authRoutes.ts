@@ -4,43 +4,40 @@ import { UserSignUpValidator } from "../schemas/schemas";
 
 
 
- export const authRouter = () => {
+export const authRouter = () => {
 
-     const router = express.Router();
+    const router = express.Router();
 
-     router.post("/signup", (req, res) => {
-         const {error, value} = UserSignUpValidator(req.body)
-         if (error) {
-             res.status(400)
-             res.json(error).send()
-         } else {
-                 CreateNewUser(value).then(userId => {
-                     res.status(201).json(userId).send()
-                    }).catch(err => {
-                        if (err == "User already exists") {
-                            res.status(400)
-                            res.json(err).send()
-                        } else {
-                            res.status(500).json(`Internal Server Error: ${err}`).send()
-                        }
-                    })
-         }
-        });
+    router.post("/signup", (req, res) => {
+        const {error, value} = UserSignUpValidator(req.body)
+        if (error) {
+            res.status(400)
+            res.json(error).send()
+        } else {
+                CreateNewUser(value).then(userId => {
+                    res.status(201).json(userId).send()
+                }).catch(err => {
+                    if (err == "User already exists") {
+                        res.status(400)
+                        res.json(err).send()
+                    } else {
+                        res.status(500).json(`Internal Server Error: ${err}`).send()
+                    }
+                })
+        }
+    });
 
-     return router;
- }
+    // login route
+    router.post("/login", (req, res) => {
 
- export const loginRouter = () => {
-     const router = express.Router();
+        CheckUserPassword(req.body).then(result => {
+            res.status(200).json(result).send()
+        }).catch(err => {
+            res.status(400)
+            res.json(err).send()
+        })
+        }
+    );
 
-     router.get("/login",  (req, res) => {
-         CheckUserPassword(req.body).then((result) => {
-             res.status(200).send("Correct Credentials")
-         }).catch(err => {
-             res.status(401).send(err)
-         })
-
-     });
-
-     return router;
- }
+    return router;
+}
