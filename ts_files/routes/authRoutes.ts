@@ -1,10 +1,11 @@
 import express from "express";
 import { CreateNewUser } from "../crud/crud";
 import { UserSignUpValidator } from "../schemas/schemas";
-
+import * as passport from 'passport';
 
 
  export const authRouter = () => {
+
      const router = express.Router();
 
      router.post("/signup", (req, res) => {
@@ -25,5 +26,8 @@ import { UserSignUpValidator } from "../schemas/schemas";
                     })
          }
         });
+     router.post("/signin", passport.authenticate('local'))
+     
+        
      return router;
  }

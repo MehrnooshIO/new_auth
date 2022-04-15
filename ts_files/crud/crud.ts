@@ -18,6 +18,24 @@ async function FindUserByEmail(userEmail: string) {
     return result
 }
 
+
+// TODO: Add diffrent message for wrong email or password
+async function CheckUserPassword(userEmail: string, userPassword: string) {
+    const result = await prisma.user.findUnique({
+        where: {
+            email: userEmail,
+        },
+    })
+    if (result) {
+        if (result.password === userPassword) {
+            return true
+        } else {
+            return false
+        }
+    }
+    return false
+}
+
 export const CreateNewUser = async (user: userSignUp) => {
     const result = await FindUserByEmail(user.email)
     if (result) {
