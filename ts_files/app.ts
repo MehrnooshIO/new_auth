@@ -1,5 +1,5 @@
 import express from "express";
-import { authRouter } from "./routes/authRoutes";
+import {authRouter, loginRouter} from "./routes/authRoutes";
 
 const app = express();
 const port = 3000;
@@ -25,6 +25,7 @@ app.use((req, res, next) => {
 })
 
 app.use(authRouter());
+app.use(loginRouter());
 
 app.get("/", (req, res) => {
     res.send("Hello World!");

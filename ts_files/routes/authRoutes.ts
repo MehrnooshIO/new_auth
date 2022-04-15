@@ -1,7 +1,7 @@
 import express from "express";
-import { CreateNewUser } from "../crud/crud";
+import {CheckUserPassword, CreateNewUser} from "../crud/crud";
 import { UserSignUpValidator } from "../schemas/schemas";
-import * as passport from 'passport';
+
 
 
  export const authRouter = () => {
@@ -26,8 +26,21 @@ import * as passport from 'passport';
                     })
          }
         });
-     router.post("/signin", passport.authenticate('local'))
-     
-        
+
+     return router;
+ }
+
+ export const loginRouter = () => {
+     const router = express.Router();
+
+     router.get("/login",  (req, res) => {
+         CheckUserPassword(req.body).then((result) => {
+             res.status(200).send("Correct Credentials")
+         }).catch(err => {
+             res.status(401).send(err)
+         })
+
+     });
+
      return router;
  }

@@ -20,6 +20,7 @@ app.use((req, res, next) => {
     next();
 });
 app.use((0, authRoutes_1.authRouter)());
+app.use((0, authRoutes_1.loginRouter)());
 app.get("/", (req, res) => {
     res.send("Hello World!");
 });

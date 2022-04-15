@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authRouter = void 0;
+exports.loginRouter = exports.authRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const crud_1 = require("../crud/crud");
 const schemas_1 = require("../schemas/schemas");
@@ -32,4 +32,16 @@ const authRouter = () => {
     return router;
 };
 exports.authRouter = authRouter;
+const loginRouter = () => {
+    const router = express_1.default.Router();
+    router.get("/login", (req, res) => {
+        (0, crud_1.CheckUserPassword)(req.body).then((result) => {
+            res.status(200).send("Correct Credentials");
+        }).catch(err => {
+            res.status(401).send(err);
+        });
+    });
+    return router;
+};
+exports.loginRouter = loginRouter;
 //# sourceMappingURL=authRoutes.js.map
