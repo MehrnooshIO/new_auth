@@ -8,9 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateNewUser = void 0;
+exports.CreateNewUser = exports.CheckUserPassword = void 0;
 const client_1 = require("@prisma/client");
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const saltRounds = 10;
 const prisma = new client_1.PrismaClient({ log: ['query', 'info'] });
 function FindUserByEmail(userEmail) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -22,15 +27,38 @@ function FindUserByEmail(userEmail) {
         return result;
     });
 }
+// TODO: Add different message for wrong email or password
+function CheckUserPassword(user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const result = yield FindUserByEmail(user.email);
+        if (result) {
+            const match = yield bcrypt_1.default.compare(user.password, result.password);
+            if (match) {
+                return result;
+            }
+        }
+        throw "Wrong Credentials";
+    });
+}
+exports.CheckUserPassword = CheckUserPassword;
 const CreateNewUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield FindUserByEmail(user.email);
     if (result) {
         throw "User already exists";
     }
-    else {
-        const newUser = yield prisma.user.create({ data: user });
-        return newUser.id;
-    }
+    const id = bcrypt_1.default.hash(user.password, saltRounds).then(function (hash) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const newUser = yield prisma.user.create({ data: {
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    password: hash
+                },
+            });
+            return newUser.id;
+        });
+    });
+    return id;
 });
 exports.CreateNewUser = CreateNewUser;
 //# sourceMappingURL=crud.js.map

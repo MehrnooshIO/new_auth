@@ -1,8 +1,10 @@
 import express from "express";
 import {CheckUserPassword, CreateNewUser} from "../crud/crud";
 import { UserSignUpValidator } from "../schemas/schemas";
+import * as jwt from "jsonwebtoken";
 
 
+const accessTokenSecret = "VeryBadSecret";
 
 export const authRouter = () => {
 
@@ -27,11 +29,13 @@ export const authRouter = () => {
         }
     });
 
+
     // login route
     router.post("/login", (req, res) => {
 
         CheckUserPassword(req.body).then(result => {
-            res.status(200).json(result).send()
+            const accessToken = jwt.sign({userId: result.id}, accessTokenSecret, {expiresIn: "1h"});
+            res.status(200).json({accessToken}).send()
         }).catch(err => {
             res.status(400)
             res.json(err).send()

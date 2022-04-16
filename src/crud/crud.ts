@@ -39,25 +39,23 @@ export async function CheckUserPassword(user: userLogin) {
     throw "Wrong Credentials";
 }
 
-/**
- * Creates new user record in database
- * */
+
 export const CreateNewUser = async (user: userSignUp) => {
     const result = await FindUserByEmail(user.email)
     if (result) {
         throw "User already exists"
-    } else {
-        bcrypt.hash(user.password, saltRounds).then(async function (hash) {
-            const newUser = await prisma.user.create(
-                {data: {
-                        firstName: user.firstName,
-                        lastName: user.lastName,
-                        email: user.email,
-                        password: hash
-                    },
-                }
-            )
-            return newUser.id
-        })
-    }   
+    }
+    const id = bcrypt.hash(user.password, saltRounds).then(async function (hash) {
+        const newUser = await prisma.user.create(
+            {data: {
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    password: hash
+                },
+            }
+        )
+        return newUser.id;
+    });
+    return id;       
 }
